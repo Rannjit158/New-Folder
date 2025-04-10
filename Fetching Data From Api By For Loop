@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Quotes without Map</title>
+  <style>
+    #loader {
+      display: none;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <button onclick="fetchQuotes()">Fetch Quotes</button>
+  <div id="loader"></div> <!-- Circle Loader -->
+  <div id="quoteContainer"></div>
+
+  <script>
+    function fetchQuotes() {
+      document.getElementById("loader").style.display = "block"; 
+      var url="https://dummyjson.com/quotes";
+      fetch(url)
+        .then(resolve => resolve.json())
+        .then(data => {
+          let quotes = data.quotes; 
+          let quoteList = "";  
+          for (let i = 0; i < quotes.length; i++) {
+            quoteList += `<p><strong>ID:</strong> ${quotes[i].id} <br> 
+                          <strong>Quote:</strong> "${quotes[i].quote}" <br> 
+                          <strong>Author:</strong> ${quotes[i].author}</p>`;
+          }
+          document.getElementById("quoteContainer").innerHTML = quoteList;
+        })
+        .catch(err => console.error(err))
+        .finally(() => {
+          document.getElementById("loader").style.display = "none"; 
+        });
+    }
+  </script>
+</body>
+</html>
+</html>
