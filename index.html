@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Quotes with Circle Loader</title>
+  <style>
+    /* Center loader */
+    #loader {
+      display: none;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    #quoteContainer {
+      margin-top: 20px;
+      font-size: 18px;
+      border:2px solid black;
+      background-color:azure;
+      color:black;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="fetchQuotes()">Fetch Quotes</button>
+  <div id="loader"></div> 
+  <div id="quoteContainer"></div>
+
+  <script>
+    function fetchQuotes() {
+      document.getElementById("loader").style.display = "block"; // Show loader
+
+      var url=("https://dummyjson.com/quotes");
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          let quoteList = data.quotes.map(index => 
+            `<p><strong>ID:</strong> ${index.id} <br> 
+               <strong>Quote:</strong> "${index.quote}" <br> 
+               <strong>Author:</strong> ${index.author}</p>`
+          );
+
+          document.getElementById("quoteContainer").innerHTML = quoteList;
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+          document.getElementById("loader").style.display = "none"; 
+        });
+    }
+  </script>
+</body>
+</html>
